@@ -1,0 +1,185 @@
+﻿@model IEnumerable<TopolkoSeminar.Predbiljezba>
+
+@{
+    ViewBag.Title = "Index";
+    int br = 0;
+}
+
+
+<h2>Predbiljezbe</h2>
+
+
+<table class="table-condensed">
+    <tr>
+        @using (Html.BeginForm())
+        {
+            <th> @Html.TextBox("SearchString")</th>
+            <th>
+                @{
+                    List<SelectListItem> krit = new List<SelectListItem>();
+
+                    krit.Add(new SelectListItem
+                    {
+                        Text = "Ime",
+                        Value = "Ime",
+
+                    });
+                    krit.Add(new SelectListItem
+                    {
+                        Text = "Prezime",
+                        Value = "Prezime",
+
+                    });
+                    krit.Add(new SelectListItem
+                    {
+                        Text = "Adresa",
+                        Value = "Adresa",
+
+                    });
+                    krit.Add(new SelectListItem
+                    {
+                        Text = "Email",
+                        Value = "Email",
+
+                    });
+                    krit.Add(new SelectListItem
+                    {
+                        Text = "Telefon",
+                        Value = "Telefon",
+
+                    });
+                    krit.Add(new SelectListItem
+                    {
+                        Text = "Seminar",
+                        Value = "Seminar",
+
+                    });
+                }
+                @Html.DropDownList("filterKat", new SelectList(krit, "Value", "Text"), "---Trazi po---")
+            </th>
+
+            <th>
+                @{
+                    List<SelectListItem> listItems = new List<SelectListItem>();
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Prihvacen",
+                        Value = "true"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Odbijen",
+                        Value = "false",
+
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Neodreden",
+                        Value = "null"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Svi",
+                        Value = "all"
+                    });
+                }
+
+                @Html.DropDownList("filter", new SelectList(listItems, "Value", "Text"), "---Odaberi Status---")
+            </th>
+            <th><input type="submit" value="Traži" /></th>
+        }
+    </tr>
+</table>
+
+<table class="table">
+    <tr>
+    <tr>
+
+
+        <th>
+            @Html.ActionLink("Datum", "Index", new { sortOrder = ViewBag.DatumSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Ime", "Index", new { sortOrder = ViewBag.ImeSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Prezime", "Index", new { sortOrder = ViewBag.PrezimeSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Adresa", "Index", new { sortOrder = ViewBag.AdresaSortParm })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telefon)
+        </th>
+        <th>
+            @Html.ActionLink("Status", "Index", new { sortOrder = ViewBag.StatusSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Seminar", "Index", new { sortOrder = ViewBag.NazivSortParm })
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Convert.ToDateTime(item.Datum).ToString("dd/MM/yyyy")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prezime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Adresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefon)
+            </td>
+            <td>
+                @if (item.Status == null)
+                {
+                    <text>Neobradeno</text>
+                }
+                else if (item.Status == false)
+                {
+                    <text>Odbijeno</text>
+                }
+                else
+                {
+                    <text>Prihvaceno</text>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seminar.Naziv)
+            </td>
+            <td>
+
+
+                @if (item.Status == true & item.Seminar == item.Seminar)
+                {
+                    br = br + 1;
+                }
+                @Html.Display(br.ToString())
+
+            </td>
+            <td>
+                @Html.ActionLink("Uredi", "Edit", new { id = item.IdPredbiljezba }) |
+                @Html.ActionLink("Detalji", "Details", new { id = item.IdPredbiljezba }) |
+                @Html.ActionLink("Izbrisi", "Delete", new { id = item.IdPredbiljezba })
+            </td>
+        </tr>
+    }
+
+</table>

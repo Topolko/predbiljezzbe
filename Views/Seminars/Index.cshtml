@@ -1,0 +1,119 @@
+﻿@model IEnumerable<TopolkoSeminar.Seminar>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+
+<h2>Seminari</h2>
+
+<p>
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Html.ActionLink("Novi seminar", "Create")
+    }
+
+
+
+</p>
+<table class="table-condensed">
+    <tr>
+        @using (Html.BeginForm())
+        {
+            <th> @Html.TextBox("SearchString")</th>
+            <th>
+                @{
+                    List<SelectListItem> listItems = new List<SelectListItem>();
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Naziv",
+                        Value = "Naziv"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Opis",
+                        Value = "Opis",
+
+                    });
+
+                }
+                @Html.DropDownList("SearchBy", new SelectList(listItems, "Value", "Text"), "---Trazi po---")
+            </th>
+            <th><input type="submit" value="Traži" /></th>
+        }
+    </tr>
+
+
+</table>
+<table class="table">
+
+    <tr>
+
+        <th>
+            @Html.ActionLink("Naziv", "Index", new { sortOrder = ViewBag.NazivSortParm })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Opis)
+        </th>
+        <th>
+            @Html.ActionLink("Datum", "Index", new { sortOrder = ViewBag.DatumSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Popunjen", "Index", new { sortOrder = ViewBag.PopunjenSortParm })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BrojPolaznika)
+        </th>
+        <th>
+            @Html.ActionLink("Sakri popunjene", "Index", new { sortOrder = ViewBag.SakriSortParam })
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naziv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Opis)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Datum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Popunjen)
+            </td>
+            <td>
+
+                @Html.DisplayFor(modelItem => item.BrojPolaznika)
+            </td>
+
+            <td>
+
+                @Html.ActionLink("Prijavi se", "Prijavi", new { id = item.IdSeminar }, null)
+
+                |
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @Html.ActionLink("Uredi", "Edit", new { id = item.IdSeminar });
+                    <text>|</text>
+                }
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @Html.ActionLink("Izbrisi", "Delete", new { id = item.IdSeminar })
+                    <text>|</text>
+                }
+
+                @Html.ActionLink("Detalji", "Details", new { id = item.IdSeminar })
+
+
+
+            </td>
+        </tr>
+    }
+
+</table>
